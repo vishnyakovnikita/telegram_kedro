@@ -34,6 +34,28 @@
             $query = mysqli_query($token, "INSERT INTO `messages_from_users` (`chat_id`, `username`, `first_name`, `last_name`, `update_id`, `date`) 
             VALUES ({$params['chat_id']}, {$params['username']}, {$params['first_name']}, {$params['last_name']}, {$params['update_id']}, {$params['date']})");
         }
+        public function sendAccount($token, $params = []) {
+            mysqli_select_db($token, $this->name_bd);
+            mysqli_query($token, "INSERT INTO `account_table` (`login`, `email`, `first_name`, `last_name`, `password`) VALUE ({$params['login']}, {$params['email']}, 
+            {$params['first_name']}, {$params['last_name']}, {$params['password']})");
+        }
+        public function getAccountTable($token) {
+            $arr = [];
+            $i = 0;
+            mysqli_select_db($token, $this->name_bd);
+            $data = mysqli_query($token, "SELECT * FROM `account_table`");
+            while ($row = mysqli_fetch_array($data)) {
+                $arr[$i]['login'] = $row['login'];
+                $i++;
+            }
+            return $arr;
+        }
+        public function getAccount($token, $login) {
+            mysqli_select_db($token, $this->name_bd);
+            $data = mysqli_query($token, "SELECT * FROM `account_table` WHERE `login` = '{$login}'");
+            $arr = mysqli_fetch_array($data);
+            return $arr;
+        }
 
     }
 ?>
